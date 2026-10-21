@@ -14,5 +14,15 @@ export const formatRupiah = (v: number | string) =>
 export const formatTanggal = (d: string | Date) =>
   format(new Date(d), "d MMM yyyy", { locale: id });
 
-export const formatTanggalWaktu = (d: string | Date) =>
+// "Admin AZA" -> "AA", "Budi" -> "BU"
+export const getInitials = (name: string) => {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  const initials =
+    words.length > 1
+      ? `${words[0]![0]}${words[1]![0]}`
+      : (words[0] ?? "").slice(0, 2);
+  return initials.toUpperCase();
+};
+
+export const formatTanggalWaktu =(d: string | Date) =>
   format(new Date(d), "d MMMM yyyy, HH.mm", { locale: id });
