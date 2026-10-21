@@ -1,5 +1,6 @@
 // Data dummy in-memory untuk mode mock. Hilang saat halaman di-reload penuh.
 import type { User } from "@/types/auth";
+import type { Customer, Gender } from "@/types/customer";
 import type { Product } from "@/types/product";
 
 export const MOCK_CREDENTIALS = {
@@ -14,6 +15,44 @@ export const mockUser: User = {
 };
 
 export const nowIso = () => new Date().toISOString();
+
+export type Archivable<T> = T & { deleted_at: string | null };
+
+// [nama, gender, tgl lahir, no. HP, alamat]
+const CUSTOMER_SEED: [string, Gender, string, string | null, string][] = [
+  ["Budi Santoso", "Pria", "1995-02-10", "081234567890", "Jakarta Selatan"],
+  ["Siti Rahmawati", "Wanita", "1992-07-21", "081398765432", "Bandung"],
+  ["Andi Pratama", "Pria", "1988-11-03", null, "Surabaya"],
+  ["Dewi Lestari", "Wanita", "1999-04-15", "085712345678", "Yogyakarta"],
+  ["Rizky Hidayat", "Pria", "2001-01-30", "082145678901", "Bekasi"],
+  ["Putri Ayuningtyas", "Wanita", "1997-09-09", "081256781234", "Depok"],
+  ["Agus Setiawan", "Pria", "1985-06-12", "087812349876", "Tangerang"],
+  ["Nur Aini", "Wanita", "1994-12-25", null, "Bogor"],
+  ["Fajar Nugroho", "Pria", "1990-03-18", "081311122233", "Semarang"],
+  ["Maya Sari", "Wanita", "1996-08-02", "085233344455", "Malang"],
+  ["Hendra Wijaya", "Pria", "1983-10-27", "081988877766", "Medan"],
+  ["Rina Marlina", "Wanita", "2000-05-05", "089612341234", "Palembang"],
+  ["Yoga Permana", "Pria", "1998-02-14", null, "Denpasar"],
+  ["Indah Permatasari", "Wanita", "1993-11-19", "081577788899", "Makassar"],
+  ["Dimas Saputra", "Pria", "2002-07-07", "082233445566", "Solo"],
+];
+
+export const customers: Archivable<Customer>[] = CUSTOMER_SEED.map(
+  ([name, gender, birthDate, phone, address], i) => {
+    const created = new Date(Date.now() - (45 - i) * 86_400_000).toISOString();
+    return {
+      id: `c0a80121-7ac0-4e1c-9d5e-${String(i + 1).padStart(12, "0")}`,
+      customer_name: name,
+      customer_address: address,
+      gender,
+      birth_date: birthDate,
+      phone,
+      created_at: created,
+      updated_at: created,
+      deleted_at: null,
+    };
+  },
+);
 
 // [nama, harga, stok, punya gambar?]
 const PRODUCT_SEED: [string, number, number, boolean][] = [
@@ -43,7 +82,7 @@ const PRODUCT_SEED: [string, number, number, boolean][] = [
   ["Cimory Yogurt Strawberry 250ml", 13500, 6, true],
 ];
 
-export const products: (Product & { deleted_at: string | null })[] = PRODUCT_SEED.map(
+export const products: Archivable<Product>[] =PRODUCT_SEED.map(
   ([name, price, stock, hasImage], i) => {
     const code = `P${String(i + 1).padStart(4, "0")}`;
     const created = new Date(Date.now() - (60 - i) * 86_400_000).toISOString();

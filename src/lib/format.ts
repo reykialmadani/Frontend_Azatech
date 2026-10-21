@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { id } from "date-fns/locale";
 
 // Nilai uang dari backend berupa string desimal; Number() hanya untuk tampilan.
@@ -11,8 +11,12 @@ export const formatRupiah = (v: number | string) =>
     .format(Number(v))
     .replace(/ /g, " "); // "Rp 12.000"
 
+// parseISO membaca "1995-02-10" sebagai tanggal lokal (new Date() menganggapnya UTC,
+// sehingga bisa mundur sehari di zona waktu negatif).
+const toDate = (d: string | Date) => (typeof d === "string" ? parseISO(d) : d);
+
 export const formatTanggal = (d: string | Date) =>
-  format(new Date(d), "d MMM yyyy", { locale: id });
+  format(toDate(d), "d MMM yyyy", { locale: id }); // "10 Feb 1995"
 
 // "Admin AZA" -> "AA", "Budi" -> "BU"
 export const getInitials = (name: string) => {
@@ -24,5 +28,5 @@ export const getInitials = (name: string) => {
   return initials.toUpperCase();
 };
 
-export const formatTanggalWaktu =(d: string | Date) =>
-  format(new Date(d), "d MMMM yyyy, HH.mm", { locale: id });
+export const formatTanggalWaktu = (d: string | Date) =>
+  format(toDate(d), "d MMM yyyy, HH.mm", { locale: id }); // "21 Okt 2026, 14.30"
