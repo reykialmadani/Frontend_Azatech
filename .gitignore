@@ -41,5 +41,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/technical-test-medior-fullstack.md/
-/PRD-frontend.md/
+/technical-test-medior-fullstack.md
+/PRD-frontend.md
