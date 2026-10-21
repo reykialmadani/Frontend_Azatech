@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 import { LOW_STOCK_THRESHOLD } from "@/types/product";
 
 export function StockBadge({ stock, className }: { stock: number; className?: string }) {
   if (stock <= 0) {
     return (
-      <span className={cn("inline-flex h-6 items-center rounded-md bg-black px-2 text-xs font-medium text-white", className)}>
+      <span className={cn("inline-flex h-6 items-center whitespace-nowrap rounded-md bg-black px-2 text-xs font-medium text-white", className)}>
         Habis
       </span>
     );
@@ -14,7 +14,7 @@ export function StockBadge({ stock, className }: { stock: number; className?: st
     return (
       <span
         className={cn(
-          "inline-flex h-6 items-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-2 text-xs font-medium text-red-600 tabular-nums",
+          "inline-flex h-6 items-center whitespace-nowrap gap-1.5 rounded-md border border-red-200 bg-red-50 px-2 text-xs font-medium text-red-600 tabular-nums",
           className,
         )}
       >
@@ -27,7 +27,7 @@ export function StockBadge({ stock, className }: { stock: number; className?: st
   return (
     <span
       className={cn(
-        "inline-flex h-6 items-center rounded-md border border-zinc-200 bg-zinc-50 px-2 text-xs text-zinc-700 tabular-nums",
+        "inline-flex h-6 items-center whitespace-nowrap rounded-md border border-zinc-200 bg-zinc-50 px-2 text-xs text-zinc-700 tabular-nums",
         className,
       )}
     >

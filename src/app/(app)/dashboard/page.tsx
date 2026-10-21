@@ -1,11 +1,8 @@
-import { ComingSoon } from "@/components/shared/coming-soon";
-import { PageHeader } from "@/components/shared/page-header";
+import type { Metadata } from "next";
+import { DashboardView } from "@/components/dashboard/dashboard-view";
 
-export default function Page() {
-  return (
-    <>
-      <PageHeader title="Dashboard" description="Ringkasan performa toko hari ini." />
-      <ComingSoon batch={6} />
-    </>
-  );
+export const metadata: Metadata = { title: "Dashboard" };
+
+export default function DashboardPage() {
+  return <DashboardView />;
 }

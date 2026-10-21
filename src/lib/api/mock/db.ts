@@ -120,7 +120,8 @@ function seedOrders() {
   let state = 42;
   const rand = (max: number) => {
     state = (state * 1_103_515_245 + 12_345) % 2_147_483_648;
-    return state % max;
+    // Pakai bit atas: bit bawah LCG modulus 2^n berulang dengan periode pendek.
+    return Math.floor((state / 2_147_483_648) * max);
   };
 
   const dates = Array.from({ length: 30 }, () => {

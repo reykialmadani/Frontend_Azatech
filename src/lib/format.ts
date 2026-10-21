@@ -11,6 +11,10 @@ export const formatRupiah = (v: number | string) =>
     .format(Number(v))
     .replace(/ /g, " "); // "Rp 12.000"
 
+// Untuk sumbu grafik: "Rp 1,2 jt", "Rp 500 rb".
+export const formatRupiahCompact = (v: number | string) =>
+  `Rp ${new Intl.NumberFormat("id-ID", { notation: "compact", maximumFractionDigits: 1 }).format(Number(v))}`;
+
 // parseISO membaca "1995-02-10" sebagai tanggal lokal (new Date() menganggapnya UTC,
 // sehingga bisa mundur sehari di zona waktu negatif).
 const toDate = (d: string | Date) => (typeof d === "string" ? parseISO(d) : d);
