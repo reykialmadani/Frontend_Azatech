@@ -22,10 +22,19 @@ interface CustomerComboboxProps {
   value: Customer | null;
   onSelect: (customer: Customer) => void;
   invalid?: boolean;
+  placeholder?: string;
+  className?: string;
 }
 
 // Pencarian dilakukan di server (data pelanggan bisa ratusan baris).
-export function CustomerCombobox({ id, value, onSelect, invalid }: CustomerComboboxProps) {
+export function CustomerCombobox({
+  id,
+  value,
+  onSelect,
+  invalid,
+  placeholder = "Cari & pilih pelanggan…",
+  className,
+}: CustomerComboboxProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search.trim(), 300);
@@ -44,12 +53,13 @@ export function CustomerCombobox({ id, value, onSelect, invalid }: CustomerCombo
         className={cn(
           "flex h-10 w-full items-center justify-between gap-2 rounded-md border border-zinc-200 bg-white px-3 text-left text-sm transition-colors duration-150 outline-none hover:bg-zinc-50 focus-visible:ring-3 focus-visible:ring-ring/50",
           invalid && "border-red-600 ring-3 ring-red-600/20",
+          className,
         )}
       >
         {value ? (
           <span className="truncate font-medium text-zinc-900">{value.customer_name}</span>
         ) : (
-          <span className="text-zinc-500">Cari &amp; pilih pelanggan…</span>
+          <span className="truncate text-zinc-500">{placeholder}</span>
         )}
         <ChevronsUpDown className="size-4 shrink-0 text-zinc-400" />
       </PopoverTrigger>

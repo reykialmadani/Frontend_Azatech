@@ -1,11 +1,9 @@
-import { ComingSoon } from "@/components/shared/coming-soon";
-import { PageHeader } from "@/components/shared/page-header";
+import type { Metadata } from "next";
+import { OrderDetailView } from "@/components/orders/order-detail-view";
 
-export default function Page() {
-  return (
-    <>
-      <PageHeader title="Detail Pesanan" description="Faktur transaksi penjualan." />
-      <ComingSoon batch={5} />
-    </>
-  );
+export const metadata: Metadata = { title: "Detail Pesanan" };
+
+export default async function OrderDetailPage({ params }: PageProps<"/orders/[id]">) {
+  const { id } = await params;
+  return <OrderDetailView id={Number(id)} />;
 }

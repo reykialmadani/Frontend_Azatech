@@ -114,3 +114,63 @@ export function nextOrderNumber(date: Date) {
   orderCounters.set(key, seq);
   return `INV-${key}-${String(seq).padStart(4, "0")}`;
 }
+
+// Seed 30 order historis dalam 30 hari terakhir (deterministik, tidak memotong stok).
+function seedOrders() {
+  let state = 42;
+  const rand = (max: number) => {
+    state = (state * 1_103_515_245 + 12_345) % 2_147_483_648;
+    return state % max;
+  };
+
+  const dates = Array.from({ length: 30 }, () => {
+    const d = new Date();
+    d.setDate(d.getDate() - rand(30));
+    d.setHours(8 + rand(12), rand(60), 0, 0);
+    return d;
+  }).sort((a, b) => a.getTime() - b.getTime());
+
+  let itemId = 0;
+  dates.forEach((date, i) => {
+    const customer = customers[rand(customers.length)]!;
+    const picked = new Set<number>();
+    const lineCount = 1 + rand(4);
+    while (picked.size < lineCount) picked.add(rand(products.length));
+
+    const items = [...picked].map((idx) => {
+      const p = products[idx]!;
+      const quantity = 1 + rand(5);
+      const unitPrice = Number(p.price);
+      return {
+        id: ++itemId,
+        product_id: p.id,
+        quantity,
+        unit_price: unitPrice.toFixed(2),
+        subtotal: (unitPrice * quantity).toFixed(2),
+        product: { id: p.id, product_code: p.product_code, product_name: p.product_name, image_url: p.image_url },
+      };
+    });
+
+    const iso = date.toISOString();
+    orders.push({
+      id: i + 1,
+      order_number: nextOrderNumber(date),
+      customer_id: customer.id,
+      created_by: mockUser.id,
+      order_date: iso,
+      total_amount: items.reduce((sum, it) => sum + Number(it.subtotal), 0).toFixed(2),
+      created_at: iso,
+      updated_at: iso,
+      customer: {
+        id: customer.id,
+        customer_name: customer.customer_name,
+        phone: customer.phone,
+        customer_address: customer.customer_address,
+      },
+      user: { id: mockUser.id, name: mockUser.name },
+      items_count: items.length,
+      items,
+    });
+  });
+}
+seedOrders();

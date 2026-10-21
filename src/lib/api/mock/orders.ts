@@ -1,7 +1,7 @@
 import type { ApiFieldErrors } from "@/types/api";
-import type { CreateOrderPayload, OrderDetail } from "@/types/order";
+import type { CreateOrderPayload, Order, OrderDetail } from "@/types/order";
 import { customers, mockUser, nextOrderNumber, nowIso, orders, products } from "./db";
-import { fail, ok, type MockRoute } from "./router";
+import { fail, ok, paginate, type MockRoute } from "./router";
 
 /**
  * Meniru prisma.$transaction di backend: semua item divalidasi dulu,
@@ -86,7 +86,35 @@ function createOrder(payload: CreateOrderPayload) {
   return ok(order, 201, "Pesanan berhasil dibuat");
 }
 
+const localDate = (iso: string) => {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+
 export const orderRoutes: MockRoute[] = [
+  {
+    method: "GET",
+    pattern: "/orders",
+    handler: ({ query }) => {
+      const from = query.get("from"); // inklusif, yyyy-MM-dd
+      const to = query.get("to"); // inklusif sampai akhir hari
+      const customerId = query.get("customer_id");
+
+      const rows = orders
+        .filter((o) => {
+          const day = localDate(o.order_date);
+          return (!from || day >= from) && (!to || day <= to) && (!customerId || o.customer_id === customerId);
+        })
+        .sort((a, b) => b.order_date.localeCompare(a.order_date))
+        .map((o): Order => {
+          const summary: Partial<OrderDetail> = { ...o };
+          delete summary.items; // list tidak menyertakan item
+          return summary as Order;
+        });
+      return paginate(rows, query);
+    },
+  },
   {
     method: "POST",
     pattern: "/orders",

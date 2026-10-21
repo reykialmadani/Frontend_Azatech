@@ -1,11 +1,8 @@
-import { ComingSoon } from "@/components/shared/coming-soon";
-import { PageHeader } from "@/components/shared/page-header";
+import type { Metadata } from "next";
+import { OrdersView } from "@/components/orders/orders-view";
 
-export default function Page() {
-  return (
-    <>
-      <PageHeader title="Riwayat Pesanan" description="Seluruh transaksi penjualan." />
-      <ComingSoon batch={5} />
-    </>
-  );
+export const metadata: Metadata = { title: "Riwayat Pesanan" };
+
+export default function OrdersPage() {
+  return <OrdersView />;
 }

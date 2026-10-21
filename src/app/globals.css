@@ -130,6 +130,29 @@
   }
 }
 
+/* Cetak faktur: hanya konten utama, tanpa navigasi / toast / padding layar. */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm;
+  }
+  body {
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  [data-sonner-toaster] {
+    display: none !important;
+  }
+  .invoice tr {
+    break-inside: avoid;
+  }
+}
+
 @layer components {
   /* Label mikro editorial: header tabel, label status */
   .micro-label {
