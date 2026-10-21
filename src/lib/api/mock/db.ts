@@ -1,6 +1,7 @@
 // Data dummy in-memory untuk mode mock. Hilang saat halaman di-reload penuh.
 import type { User } from "@/types/auth";
 import type { Customer, Gender } from "@/types/customer";
+import type { OrderDetail } from "@/types/order";
 import type { Product } from "@/types/product";
 
 export const MOCK_CREDENTIALS = {
@@ -99,3 +100,17 @@ export const products: Archivable<Product>[] =PRODUCT_SEED.map(
     };
   },
 );
+
+// Riwayat order disimpan lengkap beserta item (snapshot harga).
+export const orders: OrderDetail[] = [];
+
+// Counter nomor order per tanggal, meniru tabel order_counters di backend.
+const orderCounters = new Map<string, number>();
+
+export function nextOrderNumber(date: Date) {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const key = `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`;
+  const seq = (orderCounters.get(key) ?? 0) + 1;
+  orderCounters.set(key, seq);
+  return `INV-${key}-${String(seq).padStart(4, "0")}`;
+}
